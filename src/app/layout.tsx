@@ -19,7 +19,7 @@ const LayoutContent = ({ children }: LayoutProps) => {
       <SideBar />
       <div
         className={`flex-1 transition-all duration-300 ease-in-out ${
-          isSidebarOpen ? "md:ml-64" : "md:ml-0"
+          isSidebarOpen ? "md:ml-80" : "md:ml-0"
         }`}
       >
         {children}

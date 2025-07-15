@@ -4,15 +4,15 @@ import DownSvg from "../../../../public/svg/down";
 
 const HeaderComponent = () => {
   return (
-    <div className="bg-[#F8FAFC] w-full">
-      <div className="flex justify-between items-center p-4 border-b border-[#E2E8F0]">
+    <div className="bg-[#F8FAFC] w-full fixed top-0 left-0 right-0 ">
+      <div className="flex justify-between items-center p-4 border-b border-[#E2E8F0] ">
         <div className="">
           <Image height={100} width={100} alt="logo" src={"/images/Logo.jpg"} />
         </div>
         <h1 className="font-bold hidden md:block">
           Hacking FBI Server with raspberry pi
         </h1>
-        <div className="flex gap-3 items-center">
+        <div className=" gap-3 items-center hidden md:flex">
           <Image
             height={48}
             width={48}
