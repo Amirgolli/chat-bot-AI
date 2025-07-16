@@ -5,6 +5,7 @@ import { useChat } from "@ai-sdk/react";
 import HeaderComponent from "./components/header";
 
 export default function ChatPage() {
+
   const { messages, input, handleInputChange, handleSubmit, status } = useChat({
     api: "/api/chat",
     initialMessages: [

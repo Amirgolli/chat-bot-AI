@@ -1,8 +1,18 @@
 import Image from "next/image";
 import BurgerMenuSvg from "../../../../public/svg/burgurMenu";
 import DownSvg from "../../../../public/svg/down";
+import { useEffect, useState } from "react";
 
 const HeaderComponent = () => {
+  const [username, setUsername] = useState<string | null>(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      setUsername(payload.sub);
+    }
+  }, []);
   return (
     <div className="bg-[#F8FAFC] w-full fixed top-0 left-0 right-0 ">
       <div className="flex justify-between items-center p-4 border-b border-[#E2E8F0] ">
@@ -21,8 +31,12 @@ const HeaderComponent = () => {
             className="rounded-full"
           />
           <div className="flex flex-col">
-            <h3 className=" text-[#1E293B] text-[16px] font-medium">Taha Hosseinpour</h3>
-            <span className=" text-[#475569] text-[16px] font-light ">205 Tokens Left</span>
+            <h3 className=" text-[#1E293B] text-[16px] font-medium">
+              welcome {username || "User"}
+            </h3>
+            <span className=" text-[#475569] text-[16px] font-light ">
+              205 Tokens Left
+            </span>
           </div>
           <DownSvg />
         </div>
