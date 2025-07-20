@@ -47,7 +47,8 @@ export default function SideBar() {
         }
       );
 
-      if (!response.ok) throw new Error(`error for start chat: ${response.status}`);
+      if (!response.ok)
+        throw new Error(`error for start chat: ${response.status}`);
 
       const result = await response.json();
       console.log("Response from /send_message:", result);
@@ -62,9 +63,11 @@ export default function SideBar() {
       ]);
 
       router.push(`/chat/${result.session_id}`);
-    } catch (error) {
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Registration failed";
+      alert(errorMessage);
       console.error("Error in openNewChat:", error);
-      alert(error.message || "error for start app");
     }
   };
 
@@ -94,7 +97,7 @@ export default function SideBar() {
               src="/images/Logo.png"
               className=""
             />
-            
+
             <button type="button" onClick={openNewChat}>
               <PlusSvg />
             </button>
@@ -136,4 +139,3 @@ export default function SideBar() {
     </>
   );
 }
-

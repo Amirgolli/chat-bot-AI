@@ -24,7 +24,7 @@ const HeaderComponent = () => {
           Hacking FBI Server with raspberry pi
         </h1>
         <div className=" gap-3 items-center hidden md:flex">
-          <div className={`${username ? "block" : "block"}`}>
+          <div className={`${username ? "hidden" : "block"}`}>
             <Link href={"/signup"}>
               <button type="button" className=" cursor-pointer p-2 bg-blue-400 rounded-2xl text-white">
                 sign up
@@ -69,7 +69,7 @@ const HeaderComponent = () => {
               {/* Sidebar content here */}
               <li>
                 <a>
-                  <div className={`${username ? "block" : "block"}`}>
+                  <div className={`${username ? "hidden" : "block"}`}>
                     <Link href={"/signup"}>
                       <button type="button" className=" cursor-pointer">
                         sign up

@@ -33,10 +33,14 @@ export default function Login() {
       if (!response.ok) throw new Error(result.detail || "Login failed");
 
       localStorage.setItem("token", result.access_token!);
-      alert("Login successful!");
+      if (!response.ok) throw new Error(result.detail || "Registration failed");
+
+      alert("User created successfully!");
       router.push("/");
-    } catch (error) {
-      alert(error.message || "Login failed");
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Registration failed";
+      alert(errorMessage);
     }
   };
 

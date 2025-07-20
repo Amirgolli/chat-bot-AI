@@ -34,8 +34,10 @@ export default function Signup() {
 
       alert("User created successfully!");
       router.push("/login");
-    } catch (error) {
-      alert(error.message || "Registration failed");
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Registration failed";
+      alert(errorMessage);
     }
   };
 
