@@ -2,6 +2,7 @@ import Image from "next/image";
 import BurgerMenuSvg from "../../../../public/svg/burgurMenu";
 import DownSvg from "../../../../public/svg/down";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 const HeaderComponent = () => {
   const [username, setUsername] = useState<string | null>(null);
@@ -23,6 +24,13 @@ const HeaderComponent = () => {
           Hacking FBI Server with raspberry pi
         </h1>
         <div className=" gap-3 items-center hidden md:flex">
+          <div className={`${username ? "block" : "block"}`}>
+            <Link href={"/signup"}>
+              <button type="button" className=" cursor-pointer p-2 bg-blue-400 rounded-2xl text-white">
+                sign up
+              </button>
+            </Link>
+          </div>
           <Image
             height={48}
             width={48}
@@ -40,7 +48,40 @@ const HeaderComponent = () => {
           </div>
           <DownSvg />
         </div>
-        <BurgerMenuSvg />
+        <div className="drawer drawer-end md:hidden">
+          <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
+          <div className="drawer-content">
+            {/* Page content here */}
+            <label
+              htmlFor="my-drawer-4"
+              className="absolute right-0 top-[-20] "
+            >
+              <BurgerMenuSvg />
+            </label>
+          </div>
+          <div className="drawer-side">
+            <label
+              htmlFor="my-drawer-4"
+              aria-label="close sidebar"
+              className="drawer-overlay"
+            ></label>
+            <ul className="menu bg-white text-base-content min-h-full w-60 p-4">
+              {/* Sidebar content here */}
+              <li>
+                <a>
+                  <div className={`${username ? "block" : "block"}`}>
+                    <Link href={"/signup"}>
+                      <button type="button" className=" cursor-pointer">
+                        sign up
+                      </button>
+                    </Link>
+                  </div>
+                </a>
+              </li>
+              <li></li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   );

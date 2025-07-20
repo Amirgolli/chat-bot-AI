@@ -9,7 +9,7 @@ import RenameSvg from "../../../../public/svg/rename";
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { v4 as uuidv4 } from "uuid"; // نیاز به نصب: npm install uuid
+import { v4 as uuidv4 } from "uuid";
 
 interface Chat {
   session_id: string;
@@ -47,18 +47,18 @@ export default function SideBar() {
         }
       );
 
-      if (!response.ok) throw new Error(`خطا در شروع چت: ${response.status}`);
+      if (!response.ok) throw new Error(`error for start chat: ${response.status}`);
 
       const result = await response.json();
       console.log("Response from /send_message:", result);
 
       if (!result.session_id || result.session_id === "undefined") {
-        throw new Error("شناسه سشن نامعتبر دریافت شد");
+        throw new Error("your session is incorrect ");
       }
 
       setChats([
         ...chats,
-        { session_id: result.session_id, title: `چت ${chats.length + 1}` },
+        { session_id: result.session_id, title: `chats ${chats.length + 1}` },
       ]);
 
       router.push(`/chat/${result.session_id}`);
@@ -76,12 +76,12 @@ export default function SideBar() {
     <>
       <button
         onClick={toggleSidebar}
-        className="hidden md:block fixed top-240 left-4 z-150 btn btn-primary"
+        className=" fixed top-220 md:top-240 left-4 z-150 btn btn-primary"
       >
-        {isSidebarOpen ? "بستن" : "باز کردن"}
+        {isSidebarOpen ? "close" : "open"}
       </button>
       <div
-        className={`fixed top-0 left-0 h-full w-80 bg-white text-white transition-transform duration-300 ease-in-out z-100 ${
+        className={`fixed top-0 left-0 h-full w-60 md:w-80 bg-white text-white transition-transform duration-300 ease-in-out z-100 ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -94,6 +94,7 @@ export default function SideBar() {
               src="/images/Logo.png"
               className=""
             />
+            
             <button type="button" onClick={openNewChat}>
               <PlusSvg />
             </button>
@@ -101,7 +102,7 @@ export default function SideBar() {
           <div className="collapse text-[#1E293B] mt-5">
             <input type="checkbox" />
             <div className="collapse-title font-semibold text-[18px] flex justify-between items-center">
-              <span>چت‌ها</span>
+              <span>chats</span>
               <div className="flex gap-2 items-center">
                 <DownSvg />
               </div>

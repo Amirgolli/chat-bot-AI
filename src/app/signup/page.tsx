@@ -40,9 +40,9 @@ export default function Signup() {
   };
 
   return (
-    <div className="h-screen w-screen flex justify-center items-center">
-      <div className="w-150 h-100 flex flex-col gap-8">
-        <div className="flex justify-between items-center">
+    <div className="md:h-screen mt-60 m-10 h-max w-max md:m-0 md:w-screen flex justify-center items-center">
+      <div className="md:w-150 w-40  h-100 flex flex-col gap-8">
+        <div className="flex md:justify-between w-max  items-center">
           <h1 className="text-[30px] font-bold">Signup</h1>
           <div>
             <Image height={120} width={120} alt="logo" src="/images/Logo.jpg" />
@@ -54,7 +54,7 @@ export default function Signup() {
             <input
               id="username"
               {...register("username", { required: "Username is required" })}
-              className="w-150 p-4 rounded-4xl border border-[#CBD5E1] focus:outline-none focus:border-[#4F46E5]"
+              className="md:w-150  p-4 rounded-4xl border border-[#CBD5E1] focus:outline-none h-10 md:h-max focus:border-[#4F46E5]"
               placeholder="Username"
             />
             {errors.username && (
@@ -75,7 +75,7 @@ export default function Signup() {
                   message: "Password must be at least 6 characters",
                 },
               })}
-              className="w-150 p-4 rounded-4xl border border-[#CBD5E1] focus:outline-none focus:border-[#4F46E5]"
+              className="md:w-150 p-4 rounded-4xl border border-[#CBD5E1] focus:outline-none h-10 md:h-max focus:border-[#4F46E5]"
               placeholder="Password"
             />
             {errors.password && (
@@ -84,18 +84,17 @@ export default function Signup() {
               </span>
             )}
           </div>
-          <div className="flex justify-between items-center">
+          <div className="flex gap-15 w-max md:justify-between items-center">
             <Link
               href="/login"
-              className="text-[#4F46E5] text-[20px] hover:underline"
+              className="text-[#4F46E5] text-[14px] md:text-[20px] hover:underline"
             >
               Have an account?
             </Link>
             <button
               type="submit"
-              className="h-12 w-40 bg-[#4F46E5] rounded-2xl flex justify-center gap-2 items-center"
+              className="md:h-12 h-8 md:w-40 w-20 bg-[#4F46E5] rounded-2xl flex justify-center gap-2 items-center"
             >
-              <span className="text-white">Sign Up</span>
               <SendSvg />
             </button>
           </div>
