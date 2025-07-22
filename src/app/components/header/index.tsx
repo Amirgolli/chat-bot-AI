@@ -26,7 +26,7 @@ const HeaderComponent = () => {
         <div className=" gap-3 items-center hidden md:flex">
           <div className={`${username ? "hidden" : "block"}`}>
             <Link href={"/signup"}>
-              <button type="button" className=" cursor-pointer p-2 bg-blue-400 rounded-2xl text-white">
+              <button type="button" className=" cursor-pointer p-2 bg-blue-500 rounded-2xl text-white">
                 sign up
               </button>
             </Link>

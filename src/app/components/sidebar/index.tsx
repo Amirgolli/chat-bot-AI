@@ -27,7 +27,6 @@ export default function SideBar() {
       const newSessionId = uuidv4();
       console.log("Sending to /send_message:", {
         session_id: newSessionId,
-        content: "start",
         token,
       });
       if (!token) throw new Error("first log in");
@@ -40,10 +39,6 @@ export default function SideBar() {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({
-            session_id: newSessionId,
-            content: "start",
-          }),
         }
       );
 
