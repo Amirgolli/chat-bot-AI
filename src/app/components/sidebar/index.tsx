@@ -79,7 +79,7 @@ export default function SideBar() {
     <>
       <button
         onClick={toggleSidebar}
-        className=" fixed top-220 md:top-240 left-4 z-150 btn btn-primary"
+        className=" fixed top-180 md:top-240 left-[-10] md:left-4 z-150 btn btn-primary"
       >
         {isSidebarOpen ? "close" : "open"}
       </button>
