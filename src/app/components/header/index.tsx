@@ -43,7 +43,7 @@ const HeaderComponent = () => {
               welcome {username || "User"}
             </h3>
             <span className=" text-[#475569] text-[16px] font-light ">
-              205 Tokens Left
+              200 Tokens Left
             </span>
           </div>
           <DownSvg />

@@ -89,7 +89,9 @@ export default function ChatPage() {
   return (
     <div className="h-screen w-screen flex flex-col justify-center items-center p-4">
       <div className="w-full max-w-2xl flex flex-col gap-4">
-        <h1 className="text-2xl font-bold">chat {session_id}</h1>
+        <h1 className="md:text-3xl font-bold">
+          welcome to this chat,How can I help you??
+        </h1>
         <div className="flex-1 overflow-y-auto p-4 bg-gray-100 rounded-lg">
           {messages.map((msg, index) => (
             <div

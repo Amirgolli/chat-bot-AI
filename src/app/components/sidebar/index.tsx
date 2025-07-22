@@ -21,49 +21,14 @@ export default function SideBar() {
   const { isSidebarOpen, toggleSidebar } = useSidebar();
   const router = useRouter();
 
-  const openNewChat = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const newSessionId = uuidv4();
-      console.log("Sending to /send_message:", {
-        session_id: newSessionId,
-        token,
-      });
-      if (!token) throw new Error("first log in");
-
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/chat/send_message`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (!response.ok)
-        throw new Error(`error for start chat: ${response.status}`);
-
-      const result = await response.json();
-      console.log("Response from /send_message:", result);
-
-      if (!result.session_id || result.session_id === "undefined") {
-        throw new Error("your session is incorrect ");
-      }
-
-      setChats([
-        ...chats,
-        { session_id: result.session_id, title: `chats ${chats.length + 1}` },
-      ]);
-
-      router.push(`/chat/${result.session_id}`);
-    } catch (error: unknown) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Registration failed";
-      alert(errorMessage);
-      console.error("Error in openNewChat:", error);
-    }
+  const openNewChat = () => {
+    const newSessionId = uuidv4();
+    const newChat = {
+      session_id: newSessionId,
+      title: `chat ${chats.length + 1}`,
+    };
+    setChats([...chats, newChat]);
+    router.push(`/chat/${newSessionId}`);
   };
 
   const deleteChat = (index: number) => {
@@ -74,7 +39,7 @@ export default function SideBar() {
     <>
       <button
         onClick={toggleSidebar}
-        className=" fixed top-180 md:top-240 left-[-10] md:left-4 z-150 btn btn-primary"
+        className="fixed top-180 md:top-240 left-[-10] md:left-4 z-150 btn btn-primary"
       >
         {isSidebarOpen ? "close" : "open"}
       </button>
@@ -92,7 +57,6 @@ export default function SideBar() {
               src="/images/Logo.png"
               className=""
             />
-
             <button type="button" onClick={openNewChat}>
               <PlusSvg />
             </button>
