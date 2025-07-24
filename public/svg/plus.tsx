@@ -7,9 +7,9 @@ const PlusSvg = () => {
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       stroke="#000000"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
       className="feather feather-plus-circle"
     >
       <circle cx="12" cy="12" r="10"></circle>

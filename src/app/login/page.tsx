@@ -5,8 +5,12 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { LoginRequest, AuthResponse } from "../../types/auth";
 import { useRouter } from "next/navigation";
+import Modal from "../components/Model";
+import { useState } from "react";
 
 export default function Login() {
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const {
     register,
     handleSubmit,
@@ -35,12 +39,12 @@ export default function Login() {
       localStorage.setItem("token", result.access_token!);
       if (!response.ok) throw new Error(result.detail || "Registration failed");
 
-      alert("User created successfully!");
+      setErrorMessage("User created successfully!");
       router.push("/");
     } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : "Registration failed";
-      alert(errorMessage);
+      setErrorMessage(errorMessage);
     }
   };
 
@@ -105,6 +109,10 @@ export default function Login() {
           </div>
         </form>
       </div>
+      <Modal
+        errorMessage={errorMessage}
+        onClose={() => setErrorMessage(null)}
+      />
     </div>
   );
 }

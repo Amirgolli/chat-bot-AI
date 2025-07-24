@@ -1,4 +1,3 @@
-// src/services/auth.ts
 import axios, { AxiosError } from "axios";
 import { AuthResponse, RegisterRequest, LoginRequest } from "../types/auth";
 
