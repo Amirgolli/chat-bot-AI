@@ -2,14 +2,18 @@
 import SendSvg from "../../../public/svg/send";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { LoginRequest, AuthResponse } from "../../types/auth";
+import { AuthResponse } from "../../types/auth";
 import { useRouter } from "next/navigation";
 import Modal from "../components/Model";
 import { useState } from "react";
 
+interface LoginRequest {
+  email: string;
+  password: string;
+}
+
 export default function Login() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
   const {
     register,
     handleSubmit,
@@ -19,57 +23,73 @@ export default function Login() {
 
   const onSubmit = async (data: LoginRequest) => {
     try {
-      const formData = new URLSearchParams();
-      formData.append("username", data.username);
-      formData.append("password", data.password);
-
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
         {
           method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: formData,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: data.email,
+            password: data.password,
+          }),
         }
       );
 
       const result: AuthResponse = await response.json();
-      if (!response.ok) throw new Error(result.detail || "Login failed");
+      if (!response.ok) {
+        const errorDetail = result.detail
+          ? Array.isArray(result.detail)
+            ? result.detail.map((err) => err.msg).join(", ")
+            : result.detail
+          : "Login failed";
+        throw new Error(errorDetail);
+      }
 
-      localStorage.setItem("token", result.access_token!);
-      if (!response.ok) throw new Error(result.detail || "Registration failed");
+      if (result.access_token) {
+        localStorage.setItem("token", result.access_token);
+      } else {
+        throw new Error("No access token received");
+      }
 
-      setErrorMessage("User created successfully!");
+      setErrorMessage("Login successful!");
       router.push("/");
     } catch (error: unknown) {
       const errorMessage =
-        error instanceof Error ? error.message : "Registration failed";
+        error instanceof Error ? error.message : "Login failed";
       setErrorMessage(errorMessage);
     }
   };
 
   return (
     <div className="md:h-screen mt-60 m-10 h-max w-max md:m-0 md:w-screen flex justify-center items-center">
-      <div className="md:w-150 w-40  h-100 flex flex-col gap-8">
-        <div className="flex md:justify-between w-max  items-center">
+      <div className="md:w-150 w-40 h-100 flex flex-col gap-8">
+        <div className="flex md:justify-between w-max items-center">
           <h1 className="text-[30px] font-bold">Login</h1>
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
           <div>
-            <label htmlFor="username" className="block text-gray-700"></label>
             <input
-              id="username"
-              {...register("username", { required: "Username is required" })}
-              className="md:w-150 w-85 p-4 rounded-4xl border border-[#CBD5E1] focus:outline-none h-10 md:h-max focus:border-[#4F46E5]"
-              placeholder="Username"
+              id="email"
+              type="email"
+              {...register("email", {
+                required: "Email is required",
+                pattern: {
+                  value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                  message: "Invalid email address",
+                },
+              })}
+              className="md:w-150 w-70 p-4 rounded-4xl border border-[#CBD5E1] focus:outline-none h-10 md:h-max focus:border-[#4F46E5]"
+              placeholder="Email"
             />
-            {errors.username && (
+            {errors.email && (
               <span className="text-red-500 text-sm">
-                {errors.username.message}
+                {errors.email.message}
               </span>
             )}
           </div>
           <div>
-            <label htmlFor="password" className="block text-gray-700"></label>
             <input
               id="password"
               type="password"
@@ -80,7 +100,7 @@ export default function Login() {
                   message: "Password must be at least 6 characters",
                 },
               })}
-              className="md:w-150 w-85 p-4 rounded-4xl h-10 md:h-max border border-[#CBD5E1] focus:outline-none focus:border-[#4F46E5]"
+              className="md:w-150 w-70 p-4 rounded-4xl border border-[#CBD5E1] focus:outline-none h-10 md:h-max focus:border-[#4F46E5]"
               placeholder="Password"
             />
             {errors.password && (
