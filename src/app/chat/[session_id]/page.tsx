@@ -84,12 +84,12 @@ export default function ChatPage() {
         // Changed: Uncommented to restore response check
         throw new Error(`error for send your message: ${response.status}`);
 
-      const result = await response.json(); // Changed: Uncommented to restore API result parsing
+      const result = await response.json();
       // const result = "this is a test message"; // Changed: Commented out test message
       setMessages([
         ...messages,
         { role: "user", content: data.content, id: messages.length },
-        { role: "assistant", content: result.response }, 
+        { role: "assistant", content: result.response },
         // { role: "assistant", content: result, id: messages.length + 1 }, // Changed: Commented out test message response
       ]);
       reset();
@@ -108,7 +108,7 @@ export default function ChatPage() {
         <div className="w-full p-4 flex flex-col h-screen pb-20">
           <div className="flex-1 overflow-y-auto">
             <h1 className="text-center text-[20px] font-semibold italic md:text-2xl">
-              welcome to chat,How can I help you
+              به صفحه چت خوش آمدید،چطور میتوانم کمک تان کنم؟
             </h1>
             {messages.map((message) => (
               <div

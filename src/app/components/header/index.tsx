@@ -20,20 +20,7 @@ const HeaderComponent = () => {
           <div className={`${username ? "block" : "hidden"}`}>
             <BurgerMenuSvg />
           </div>
-          <div className={`${username ? "hidden" : "block"}`}>
-            <Link href={"/"}>
-              <Image
-                height={100}
-                width={100}
-                alt="logo"
-                src={"/images/Logo.jpg"}
-              />
-            </Link>
-          </div>
         </div>
-        <h1 className="font-bold hidden md:block">
-          Hacking FBI Server with raspberry pi
-        </h1>
         <div
           className={` gap-3 items-center   ${username ? "flex" : "hidden"}`}
         >
@@ -48,16 +35,6 @@ const HeaderComponent = () => {
               200 Tokens Left
             </span>
           </div>
-        </div>
-        <div className={`${username ? "hidden" : "block"}`}>
-          <Link href={"/signup"}>
-            <button
-              type="button"
-              className=" cursor-pointer p-2 bg-blue-500 rounded-2xl text-white "
-            >
-              sign up
-            </button>
-          </Link>
         </div>
       </div>
     </div>

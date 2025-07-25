@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import SendSvg from "../../../public/svg/send";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
@@ -49,9 +48,7 @@ export default function Signup() {
       <div className="md:w-150 w-40  h-100 flex flex-col gap-8">
         <div className="flex md:justify-between w-max  items-center">
           <h1 className="text-[30px] font-bold">Signup</h1>
-          <div>
-            <Image height={120} width={120} alt="logo" src="/images/Logo.jpg" />
-          </div>
+
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
           <div>
@@ -59,7 +56,7 @@ export default function Signup() {
             <input
               id="username"
               {...register("username", { required: "Username is required" })}
-              className="md:w-150  p-4 rounded-4xl border border-[#CBD5E1] focus:outline-none h-10 md:h-max focus:border-[#4F46E5]"
+              className="md:w-150 w-85  p-4 rounded-4xl border border-[#CBD5E1] focus:outline-none h-10 md:h-max focus:border-[#4F46E5]"
               placeholder="Username"
             />
             {errors.username && (
@@ -80,7 +77,7 @@ export default function Signup() {
                   message: "Password must be at least 6 characters",
                 },
               })}
-              className="md:w-150 p-4 rounded-4xl border border-[#CBD5E1] focus:outline-none h-10 md:h-max focus:border-[#4F46E5]"
+              className="md:w-150 w-85 p-4 rounded-4xl border border-[#CBD5E1] focus:outline-none h-10 md:h-max focus:border-[#4F46E5]"
               placeholder="Password"
             />
             {errors.password && (
