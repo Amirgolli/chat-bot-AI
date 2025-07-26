@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import HeaderComponent from "@/app/components/header";
@@ -8,7 +8,7 @@ import SendSvg from "../../../../public/svg/send";
 import Modal from "@/app/components/Model";
 
 interface Message {
-  role: "user" | "assistant";
+  role: "user" | "assistant" | "loading";
   content: string;
   id?: number;
 }
@@ -22,6 +22,7 @@ export default function ChatPage() {
   const { session_id } = useParams();
   const [messages, setMessages] = useState<Message[]>([]);
   const { register, handleSubmit, reset } = useForm<SendMessageRequest>();
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchHistory = async () => {
@@ -58,17 +59,35 @@ export default function ChatPage() {
     if (session_id) fetchHistory();
   }, [session_id]);
 
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
+
   const onSubmit = async (data: SendMessageRequest) => {
     try {
       if (!session_id || session_id === "undefined") {
-        // Changed: Uncommented to restore session_id check
         throw new Error("session id is incorrect");
       }
-      const token = localStorage.getItem("token"); // Changed: Uncommented to restore token check
+      const token = localStorage.getItem("token");
       if (!token) throw new Error("please first login");
 
+      const userMessage: Message = {
+        role: "user",
+        content: data.content,
+        id: messages.length,
+      };
+      const loadingMessage: Message = {
+        role: "loading",
+        content: "دستیار در حال پاسخ دادن است",
+        id: messages.length + 1,
+      };
+      setMessages([...messages, userMessage, loadingMessage]);
+      reset();
+
       const response = await fetch(
-        // Changed: Uncommented to restore API call
         `${process.env.NEXT_PUBLIC_API_URL}/chat/send_message`,
         {
           method: "POST",
@@ -81,22 +100,24 @@ export default function ChatPage() {
       );
 
       if (!response.ok)
-        // Changed: Uncommented to restore response check
         throw new Error(`error for send your message: ${response.status}`);
 
       const result = await response.json();
-      // const result = "this is a test message"; // Changed: Commented out test message
-      setMessages([
-        ...messages,
-        { role: "user", content: data.content, id: messages.length },
-        { role: "assistant", content: result.response },
-        // { role: "assistant", content: result, id: messages.length + 1 }, // Changed: Commented out test message response
-      ]);
-      reset();
+
+      setMessages((prevMessages) =>
+        prevMessages.map((msg) =>
+          msg.role === "loading" && msg.id === loadingMessage.id
+            ? { role: "assistant", content: result.response, id: msg.id }
+            : msg
+        )
+      );
     } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : "Registration failed";
       setErrorMessage(errorMessage);
+      setMessages((prevMessages) =>
+        prevMessages.filter((msg) => msg.role !== "loading")
+      );
     }
   };
 
@@ -105,52 +126,70 @@ export default function ChatPage() {
       <HeaderComponent />
       <div className="flex h-screen bg-gray-100 mt-19">
         {/* Chat Area */}
-        <div className="w-full p-4 flex flex-col h-screen pb-20">
-          <div className="flex-1 overflow-y-auto">
+        <div className="w-full p-4 flex flex-col h-screen pb-40">
+          <div ref={chatContainerRef} className="flex-1 overflow-y-auto px-4">
             <h1 className="text-center text-[20px] font-semibold italic md:text-2xl">
               به صفحه چت خوش آمدید،چطور میتوانم کمک تان کنم؟
             </h1>
             {messages.map((message) => (
               <div
                 key={message.id ?? messages.indexOf(message)}
-                className={`flex items-start ${
+                className={`flex items-start my-2 ${
                   message.role === "user" ? "justify-end" : "justify-start"
                 }`}
               >
                 {message.role === "user" ? (
                   <>
                     <div
-                      className={`p-3 rounded-lg max-w-xs bg-[#4F46E5] text-white`}
+                      className={`p-3 rounded-lg w-[25%] bg-[#4F46E5] text-white`}
                     >
                       {message.content.includes("http") ? (
                         <a
                           href={message.content}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-blue-500 underline"
+                          className="text-blue-300 underline"
                         >
                           {message.content}
                         </a>
                       ) : (
                         message.content
                       )}
-                      <div className="text-xs text-gray-400 mt-1">03:27 PM</div>
+                      <div className="text-xs text-gray-200 mt-1">03:27 PM</div>
                     </div>
-                    <div className="flex-shrink-0 ml-2 mb-40">
+                    <div className="flex-shrink-0 ml-2">
                       <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
                         U
                       </div>
                     </div>
                   </>
-                ) : (
+                ) : message.role === "loading" ? (
                   <>
-                    <div className="flex-shrink-0 mr-2 mb-40">
+                    <div className="flex-shrink-0 mr-2">
                       <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
                         SL
                       </div>
                     </div>
                     <div
-                      className={`p-3 rounded-lg max-w-xs bg-white text-left`}
+                      className={`p-3 rounded-lg w-[50%] bg-gray-200 text-left italic text-gray-600`}
+                    >
+                      <span className="chat-loading-dots">
+                        {message.content}
+                      </span>{" "}
+                      <div className="text-xs text-gray-400 mt-1">
+                        در حال بارگذاری...
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex-shrink-0 mr-2">
+                      <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                        SL
+                      </div>
+                    </div>
+                    <div
+                      className={`p-3 rounded-lg w-[50%] bg-white text-left`}
                     >
                       {message.content.includes("http") ? (
                         <a
@@ -181,7 +220,7 @@ export default function ChatPage() {
               {...register("content", {
                 required: "you should write something",
               })}
-              placeholder="Message to Slothpilot..."
+              placeholder="Message to assistant..."
               className="flex-1 p-2 rounded-lg mr-2 outline-0"
             />
             <div className="self-end">
